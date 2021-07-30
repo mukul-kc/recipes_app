@@ -1,9 +1,10 @@
-import { createStackNavigator} from "react-navigation-stack";
+import { createStackNavigator } from "react-navigation-stack";
+import { Platform } from 'react-native';
 import { createAppContainer } from "react-navigation";
 import CategoriesScreen from "../screens/CategoriesScreen";
 import CategoriesMealsScreen from "../screens/CategoryMealsScreen";
 import MealDetailScreen from "../screens/MealDetailScreen";
-
+import Colors from '../constants/Colors';
 // Categories, meals in Categories and meal details all form part of one stack 
 
 // All components in navigator automatically get a special prop passed to them
@@ -26,9 +27,24 @@ import MealDetailScreen from "../screens/MealDetailScreen";
 
 
 const MealsNavigator = createStackNavigator({
-    Categories: CategoriesScreen,
+    Categories: {
+        // for screens with default headers specify stuff here.
+        screen: CategoriesScreen,
+        navigationOptions: {
+            headerTitle: 'Meal Categories',
+        }
+    },
     CategoryMeals: CategoriesMealsScreen,
     MealDetail: MealDetailScreen,
+}, {
+    defaultNavigationOptions: {
+        headerStyle: {
+            backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : 'white',
+        },
+        headerTintColor: Platform.OS === 'ios' ? Colors.primaryColor : 'white'
+    }
 });
+// All of default navigation options specified will be applied to all screens of stack navigator
+// Any styles specified in the component itself (more specific) will override the default styles
 
 export default createAppContainer(MealsNavigator);
