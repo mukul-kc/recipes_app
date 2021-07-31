@@ -1,9 +1,12 @@
-import { createStackNavigator } from "react-navigation-stack";
+import { createStackNavigator  } from "react-navigation-stack";
 import { Platform } from 'react-native';
 import { createAppContainer } from "react-navigation";
+import { createBottomTabNavigator } from "react-navigation-tabs";
+
 import CategoriesScreen from "../screens/CategoriesScreen";
 import CategoriesMealsScreen from "../screens/CategoryMealsScreen";
 import MealDetailScreen from "../screens/MealDetailScreen";
+import FavoritesScreen from "../screens/FavouritesScreen";
 import Colors from '../constants/Colors';
 // Categories, meals in Categories and meal details all form part of one stack 
 
@@ -48,4 +51,13 @@ const MealsNavigator = createStackNavigator({
 // All of default navigation options specified will be applied to all screens of stack navigator
 // Any styles specified in the component itself (more specific) will override the default styles
 
-export default createAppContainer(MealsNavigator);
+const MealsTabNavigator = createBottomTabNavigator({
+    Meals: MealsNavigator, // Can also use the stackNavigator inside of this tab navigator  
+    Favorites: FavoritesScreen
+}, {
+    tabBarOptions: {
+        activeTintColor: Colors.accentColor
+    }
+});
+
+export default createAppContainer(MealsTabNavigator);

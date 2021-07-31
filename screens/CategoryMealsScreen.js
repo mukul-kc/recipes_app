@@ -20,7 +20,9 @@ const CategoriesMealsScreen = props => {
     const renderMealItem = itemData => {
         return <MealItem
             title={itemData.item.title}
-            onSelect={() => { }}
+            onSelectMeal={() => { 
+                props.navigation.navigate({routeName: 'MealDetail', params: { mealId: itemData.item.id}})
+            }}
             duration={itemData.item.duration}
             complexity={itemData.item.complexity}
             affordability={itemData.item.affordability}
@@ -40,7 +42,7 @@ CategoriesMealsScreen.navigationOptions = (navigationData) => {
     const catId = navigationData.navigation.getParam('categoryId');
     const selectedCategory = CATEGORIES.find(cat => cat.id === catId);
 
-    // Now this function should return an object which we were going to hardocde earlier
+    // Now this function should return an object which we were going to hardcode earlier
     return {
         headerTitle: selectedCategory.title,
     }
