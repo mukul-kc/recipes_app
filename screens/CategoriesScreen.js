@@ -4,6 +4,10 @@ import { View, StyleSheet, Text, FlatList, TouchableOpacity } from 'react-native
 
 import { CATEGORIES } from '../data/dummy-data';
 import CategoryGridTile from '../components/CategoryGridTile';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
+
+
 const CategoriesScreen = props => {
     
     const renderGridItem = (itemData) => {
@@ -26,8 +30,13 @@ const CategoriesScreen = props => {
     );
 }
 
-CategoriesScreen.navigationOptions = {
+CategoriesScreen.navigationOptions = navigationData => {
+    return {
     headerTitle: 'Categories',
+    headerLeft: () => <HeaderButtons HeaderButtonComponent={HeaderButton}><Item title='M' onPress={() => {
+        navigationData.navigation.toggleDrawer();
+    }}/></HeaderButtons> 
+    }
 }
 
 const styles = StyleSheet.create({

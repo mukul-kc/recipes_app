@@ -4,7 +4,7 @@ import { HeaderButton } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
 
 const CustomHeaderButton = props => {
-    return <HeaderButton {...props} color={Platform.OS === 'android' ? 'white' : Colors.primaryColor}/>
+    return <HeaderButton {...props} color={Platform.OS === 'android' ? 'white' : '#4a148c'}/>
 }
 
 export default CustomHeaderButton;

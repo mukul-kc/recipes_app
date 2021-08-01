@@ -1,13 +1,17 @@
-import { createStackNavigator  } from "react-navigation-stack";
+import { createStackNavigator } from "react-navigation-stack";
+import React from 'react';
 import { Platform } from 'react-native';
 import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
+import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { createDrawerNavigator } from "react-navigation-drawer";
 
 import CategoriesScreen from "../screens/CategoriesScreen";
 import CategoriesMealsScreen from "../screens/CategoryMealsScreen";
 import MealDetailScreen from "../screens/MealDetailScreen";
-import FavoritesScreen from "../screens/FavouritesScreen";
 import Colors from '../constants/Colors';
+import FavouritesScreen from "../screens/FavouritesScreen";
+import FiltersScreen from "../screens/FiltersScreen";
 // Categories, meals in Categories and meal details all form part of one stack 
 
 // All components in navigator automatically get a special prop passed to them
@@ -29,6 +33,13 @@ import Colors from '../constants/Colors';
 // replace() replaces the screen completely. Example use : When user logins you don't want the user to go back to login screen.
 
 
+const defaultConfig = {
+        headerStyle: {
+            backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : 'white',
+        },
+        headerTintColor: Platform.OS === 'ios' ? Colors.primaryColor : 'white'
+}
+
 const MealsNavigator = createStackNavigator({
     Categories: {
         // for screens with default headers specify stuff here.
@@ -40,24 +51,67 @@ const MealsNavigator = createStackNavigator({
     CategoryMeals: CategoriesMealsScreen,
     MealDetail: MealDetailScreen,
 }, {
-
-    defaultNavigationOptions: {
-        headerStyle: {
-            backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : 'white',
-        },
-        headerTintColor: Platform.OS === 'ios' ? Colors.primaryColor : 'white'
-    }
+    defaultNavigationOptions: defaultConfig
 });
 // All of default navigation options specified will be applied to all screens of stack navigator
 // Any styles specified in the component itself (more specific) will override the default styles
 
-const MealsTabNavigator = createBottomTabNavigator({
-    Meals: MealsNavigator, // Can also use the stackNavigator inside of this tab navigator  
-    Favorites: FavoritesScreen
+const FavouritesNavigator = createStackNavigator({
+    Favourites: FavouritesScreen,
+    MealDetail: MealDetailScreen,
 }, {
-    tabBarOptions: {
-        activeTintColor: Colors.accentColor
-    }
+    defaultNavigationOptions: defaultConfig
 });
 
-export default createAppContainer(MealsTabNavigator);
+
+
+const tabConfig = {
+    Meals: {
+        screen: MealsNavigator,
+        navigationOptions: {
+            tabBarIcon: (tabInfo) => {
+            },
+            tabbarColor: Colors.primaryColor,
+        }
+    }, // Can also use the stackNavigator inside of this tab navigator  
+    Favorites: {
+        screen: FavouritesNavigator,
+        navigationOptions: {
+            tabBarColor: Colors.accentColor
+        }
+    }
+}
+
+
+const MealsTabNavigator = Platform.OS === 'android' ? createMaterialBottomTabNavigator(tabConfig, {
+    activeColor: 'white',
+    shifting: true,
+    barStyle: {
+        // additional config if you don't want shifting
+    }
+})
+    : createBottomTabNavigator(tabConfig, {
+        tabBarOptions: {
+            activeTintColor: Colors.accentColor
+        }
+    });
+const FiltersNavigator = createStackNavigator({
+    Filters: FiltersScreen 
+}, {
+    navigationOptions: {
+        // drawerLabel: 'Filters!'
+    },
+    defaultNavigationOptions: defaultConfig
+});
+
+const MainNavigator = createDrawerNavigator({
+    MealsFavs: {
+        screen: MealsTabNavigator,
+        navigationOptions: {
+            drawerLabel: 'Meals'
+        }
+    },
+    Filters: FiltersNavigator,
+});
+
+export default createAppContainer(MainNavigator);

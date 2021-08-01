@@ -1,14 +1,12 @@
 import React from 'react';
 
-import { View, StyleSheet, Text, Button, FlatList } from 'react-native';
-
 import { CATEGORIES, MEALS } from '../data/dummy-data';
+import MealList from '../components/MealList'
 // NOTE: diff between push and navigate
 // If you try to add the current screen to the stack, it will not work with navigate
 // While you can do it with push
 
 // Why push the same screen? Some apps like GDrive, you go from one folder to another, Screen is the SAME, just the content has changed.
-import MealItem from '../components/MealItem';
 
 
 const CategoriesMealsScreen = props => {
@@ -17,22 +15,8 @@ const CategoriesMealsScreen = props => {
 
     const displayedMeals = MEALS.filter(meal => meal.categoryIds.indexOf(catId) >= 0);
 
-    const renderMealItem = itemData => {
-        return <MealItem
-            title={itemData.item.title}
-            onSelectMeal={() => { 
-                props.navigation.navigate({routeName: 'MealDetail', params: { mealId: itemData.item.id}})
-            }}
-            duration={itemData.item.duration}
-            complexity={itemData.item.complexity}
-            affordability={itemData.item.affordability}
-            image={itemData.item.imageUrl} />
-    }
-
     return (
-        <View style={styles.screen}>
-            <FlatList keyExtractor={(item, index) => item.id} data={displayedMeals} renderItem={renderMealItem} style={{ width: '100%' }} />
-        </View>
+        <MealList displayedMeals={displayedMeals} navigation={props.navigation}/>            
     );
 }
 
@@ -47,13 +31,5 @@ CategoriesMealsScreen.navigationOptions = (navigationData) => {
         headerTitle: selectedCategory.title,
     }
 }
-
-const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-});
 
 export default CategoriesMealsScreen;
