@@ -101,7 +101,7 @@ const FiltersNavigator = createStackNavigator({
     navigationOptions: {
         // drawerLabel: 'Filters!'
     },
-    defaultNavigationOptions: defaultConfig
+    defaultNavigationOptions: defaultConfig,
 });
 
 const MainNavigator = createDrawerNavigator({
@@ -112,6 +112,10 @@ const MainNavigator = createDrawerNavigator({
         }
     },
     Filters: FiltersNavigator,
+}, {
+    contentOptions: {
+        activeTintColor: Colors.accentColor
+    }
 });
 
 export default createAppContainer(MainNavigator);
